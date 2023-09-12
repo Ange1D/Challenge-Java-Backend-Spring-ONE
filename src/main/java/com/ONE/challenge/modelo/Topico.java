@@ -1,5 +1,7 @@
 package com.ONE.challenge.modelo;
 
+import com.ONE.challenge.dto.topico.DatosRegistroTopico;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,9 @@ public class Topico {
     private Curso curso;
     private List<Respuesta> respuestas = new ArrayList<>();
 
-    public Topico(String titulo, String mensaje, Curso curso) {
-        this.titulo = titulo;
-        this.mensaje = mensaje;
+    public Topico(DatosRegistroTopico datos, Curso curso) {
+        this.titulo = datos.titulo();
+        this.mensaje = datos.mensaje();
         this.curso = curso;
     }
 
