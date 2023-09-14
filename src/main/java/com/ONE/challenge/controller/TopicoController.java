@@ -3,6 +3,7 @@ package com.ONE.challenge.controller;
 import com.ONE.challenge.dto.topico.DatosListadoTopico;
 import com.ONE.challenge.dto.topico.DatosRegistroTopico;
 import com.ONE.challenge.dto.topico.DatosRespuestaTopico;
+import com.ONE.challenge.dto.topico.DatosRespuestaTopicoId;
 import com.ONE.challenge.modelo.Curso;
 import com.ONE.challenge.modelo.Topico;
 import com.ONE.challenge.repository.CursoRepository;
@@ -41,6 +42,12 @@ public class TopicoController {
     @GetMapping
     public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10)Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosRespuestaTopicoId> retornaDatosTopico(@PathVariable Long id) {
+        Topico topico = topicoRepository.getReferenceById(id);
+        return ResponseEntity.ok(new DatosRespuestaTopicoId(topico));
     }
 
 
