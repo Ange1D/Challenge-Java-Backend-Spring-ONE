@@ -1,5 +1,6 @@
 package com.ONE.challenge.modelo;
 
+import com.ONE.challenge.dto.topico.DatosActualizarTopico;
 import com.ONE.challenge.dto.topico.DatosRegistroTopico;
 
 import java.time.LocalDateTime;
@@ -110,6 +111,22 @@ public class Topico {
 
     public void setRespuestas(List<Respuesta> respuestas) {
         this.respuestas = respuestas;
+    }
+
+
+    public void actualizarDatos(DatosActualizarTopico datosActualizar, Curso curso) {
+        if (datosActualizar.titulo() != null) {
+            this.titulo = datosActualizar.titulo();
+        }
+        if (datosActualizar.mensaje() != null) {
+            this.mensaje = datosActualizar.mensaje();
+        }
+        if (datosActualizar.estado() != datosActualizar.estado()) {
+            this.status = datosActualizar.estado();
+        }
+        if (curso != null) {
+            this.curso = curso;
+        }
     }
 
 }

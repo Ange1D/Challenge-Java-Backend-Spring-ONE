@@ -1,13 +1,11 @@
 package com.ONE.challenge.controller;
 
-import com.ONE.challenge.dto.topico.DatosListadoTopico;
-import com.ONE.challenge.dto.topico.DatosRegistroTopico;
-import com.ONE.challenge.dto.topico.DatosRespuestaTopico;
-import com.ONE.challenge.dto.topico.DatosRespuestaTopicoId;
+import com.ONE.challenge.dto.topico.*;
 import com.ONE.challenge.modelo.Curso;
 import com.ONE.challenge.modelo.Topico;
 import com.ONE.challenge.repository.CursoRepository;
 import com.ONE.challenge.repository.TopicoRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,5 +48,15 @@ public class TopicoController {
         return ResponseEntity.ok(new DatosRespuestaTopicoId(topico));
     }
 
+
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<DatosRespuestaTopico> actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+        Curso curso = cursoRepository.getReferenceById(datosActualizarTopico.cursoId());
+        Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id());
+        topico.actualizarDatos(datosActualizarTopico, curso);
+        return ResponseEntity.ok( new DatosRespuestaTopico(topico));
+    }
 
 }
