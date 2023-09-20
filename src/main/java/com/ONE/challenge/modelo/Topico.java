@@ -129,4 +129,13 @@ public class Topico {
         }
     }
 
+    public void agregarRespuesta(Respuesta respuesta) {
+        this.respuestas.add(respuesta);
+        if (respuesta.getSolucion()) {
+            this.status = StatusTopico.SOLUCIONADO;
+        } else {
+            this.status = StatusTopico.NO_SOLUCIONADO;
+        }
+    }
+
 }
