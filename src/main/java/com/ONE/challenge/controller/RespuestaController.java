@@ -44,6 +44,7 @@ public class RespuestaController {
         }
         Respuesta respuesta= respuestaRepository.save(new Respuesta(datosRegistroRespuesta,topico, usuario));
         topico.agregarRespuesta(respuesta);
+        usuario.agregarRespuesta(respuesta);
         URI url= uriComponentsBuilder.path("/respuestas/{id}").buildAndExpand(respuesta.getId()).toUri();
         return ResponseEntity.created(url).body(new DatosRespuesta(respuesta));
     }

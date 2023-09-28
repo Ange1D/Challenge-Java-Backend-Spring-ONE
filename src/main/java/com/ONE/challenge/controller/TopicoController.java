@@ -3,10 +3,13 @@ package com.ONE.challenge.controller;
 import com.ONE.challenge.dto.topico.*;
 import com.ONE.challenge.modelo.Curso;
 import com.ONE.challenge.modelo.Topico;
+import com.ONE.challenge.modelo.Usuario;
 import com.ONE.challenge.repository.CursoRepository;
 import com.ONE.challenge.repository.TopicoRepository;
+import com.ONE.challenge.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,18 +23,20 @@ import java.net.URI;
 @RequestMapping("/topicos")
 public class TopicoController {
 
-    private final TopicoRepository topicoRepository;
-    private final CursoRepository cursoRepository;
-
-    public TopicoController(TopicoRepository topicoRepository, CursoRepository cursoRepository) {
-        this.topicoRepository = topicoRepository;
-        this.cursoRepository = cursoRepository;
-    }
+    @Autowired
+    private TopicoRepository topicoRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private CursoRepository cursoRepository;
 
     @PostMapping
     public ResponseEntity<DatosRespuestaTopico> registroTopico(@RequestBody @Valid DatosRegistroTopico datosRegistro, UriComponentsBuilder uri) {
+        Usuario usuario = usuarioRepository.getReferenceById(datosRegistro.autorId());
         Curso curso = cursoRepository.getReferenceById(datosRegistro.cursoId());
-        Topico topico = topicoRepository.save(new Topico(datosRegistro, curso));
+        Topico topico = topicoRepository.save(new Topico(datosRegistro, usuario, curso));
+        usuario.agregarTopico(topico);
+        curso.agregarTopico(topico);
         DatosRespuestaTopico datosRespuesta = new DatosRespuestaTopico(topico);
         URI url = uri.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(url).body(datosRespuesta);
@@ -53,9 +58,10 @@ public class TopicoController {
     @PutMapping
     @Transactional
     public ResponseEntity<DatosRespuestaTopico> actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+        Usuario usuario = usuarioRepository.getReferenceById(datosActualizarTopico.autorId());
         Curso curso = cursoRepository.getReferenceById(datosActualizarTopico.cursoId());
         Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id());
-        topico.actualizarDatos(datosActualizarTopico, curso);
+        topico.actualizarDatos(datosActualizarTopico, usuario, curso);
         return ResponseEntity.ok( new DatosRespuestaTopico(topico));
     }
 

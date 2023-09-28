@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class Usuario implements UserDetails {
     private String contrasena;
     @Enumerated(EnumType.STRING)
     private Tipo tipo = Tipo.ROLE_USER;
+
+    @OneToMany(mappedBy = "autor")
+    private List<Topico> topicos = new ArrayList<>();
+    @OneToMany(mappedBy = "autor")
+    private List<Respuesta> respuestas = new ArrayList<>();
 
     public Usuario(DatosRegistroUsuario datosRegistroUsuario){
         this.nombre= datosRegistroUsuario.nombre();
@@ -57,6 +63,16 @@ public class Usuario implements UserDetails {
     }
 
 
+
+    public void agregarTopico(Topico topico){
+        this.topicos.add(topico);
+    }
+
+    public void agregarRespuesta(Respuesta respuesta) {
+        this.respuestas.add(respuesta);
+    }
+
+
     public void actualizarContrasena(DatosActualizarContrasena datosActualizarContrasena) {
         if (datosActualizarContrasena.contrasenaActual().equals(this.contrasena)){
             this.contrasena=datosActualizarContrasena.contrasenaNueva();
@@ -76,7 +92,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.nombre;
+        return this.email;
     }
 
     @Override

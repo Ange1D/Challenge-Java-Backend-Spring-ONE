@@ -35,6 +35,9 @@ public class Curso {
         this.categoria=datosRegistroCurso.categoria();
     }
 
+    public void agregarTopico(Topico topico){
+        topicos.add(topico);
+    }
 
     public void actualizarCurso(DatosActualizarCurso datosActualizarCurso) {
         if(datosActualizarCurso.nombre()!=null){
